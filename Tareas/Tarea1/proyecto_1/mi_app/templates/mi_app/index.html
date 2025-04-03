@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Académica</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input {
+            width: 50px;
+            text-align: center;
+        }
+        .buttons {
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            padding: 5px 15px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Evaluación Académica</h2>
+    <form id="formulario-evaluacion" method="post" action="{% url 'meritos_profesional' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Categoría</th>
+                <th>Parámetros</th>
+                <th>Cantidad</th>
+                <th>Puntaje</th>
+                <th>Máx.</th>
+            </tr>
+            <tr>
+                <td rowspan="4">FORMACIÓN ACADÉMICA</td>
+                <td>Diplomado: 2 puntos (1 por cada adicional)</td>
+                <td><input type="number" name="diplomado" min="0" value="{{ diplomado }}"></td>
+                <td>{{ puntaje_diplomado |default:0}}</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Especialidad: 4 puntos (2 por cada adicional)</td>
+                <td><input type="number" name="especialidad" min="0" value="{{ especialidad }}"></td>
+                <td>{{ puntaje_especialidad |default:0}}</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>Maestría: 8 puntos (3 por cada adicional)</td>
+                <td><input type="number" name="maestria" min="0" value="{{ maestria }}"></td>
+                <td>{{ puntaje_maestria |default:0}}</td>
+                <td>11</td>
+            </tr>
+            <tr>
+                <td>Doctorado: 12 puntos</td>
+                <td><input type="number" name="doctorado" min="0" value="{{ doctorado }}"></td>
+                <td>{{ puntaje_doctorado |default:0}}</td>
+                <td>12</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right;"><b>Subtotal (hasta 12 puntos):</b></td>
+                <td>{{ total_puntaje_formacion_academica |default:0}}</td>
+            </tr>
+
+        <tr>
+            <td>ACTUALIZACIÓN ACADÉMICA</td>
+            <td>Asistencia a programas, cursos, seminarios, talleres y congresos relacionadosa area de derecho (0.5 por evento)</td>
+            <td><input type="number" name="cursos" min="0" value="{{ cursos }}"></td>
+            <td>{{ puntaje_actualizacion |default:0}}</td>
+            <td>6</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: right;"><b>Subtotal (hasta 6 puntos):</b></td>
+            <td>{{ puntaje_actualizacion |default:0}}</td>
+        </tr>
+
+        <tr>
+            <td rowspan="3">EXPERIENCIA PROFESIONAL</td>
+            <td>Antigüedad en el ejercicio de la abogacía (1 punto por año)</td>
+            <td><input type="number" name="antiguedad" min="0" value="{{ antiguedad }}"></td>
+            <td>{{ puntaje_antiguedad |default:0}}</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>Experiencia como servidor público (1 punto por año)</td>
+            <td><input type="number" name="servidor_publico" min="0" value="{{ servidor_publico }}"></td>
+            <td>{{ puntaje_servidor_publico |default:0}}</td>
+            <td>4</td>
+        </tr>
+        <tr>
+            <td>Como docente universitario (2 puntos/año pregrado, 2 por módulo posgrado)</td>
+            <td><input type="number" name="docente" min="0" value="{{ docente }}"></td>
+            <td>{{ puntaje_docente |default:0}}</td>        
+            <td>2</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: right;"><b>Subtotal (hasta 10 puntos):</b></td>
+            <td>{{ total_experiencia |default:0}}</td>
+        </tr>
+
+        <tr>
+            <td>PRODUCCIÓN INTELECTUAL</td>
+            <td>Artículos publicados en el área jurídica (1 punto por artículo, máx. 2)</td>
+            <td><input type="number" name="articulos" min="0" max="2" value="{{ articulos }}"></td>
+            <td>{{ puntaje_produccion |default:0}}</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: right;"><b>Subtotal (hasta 2 puntos):</b></td>
+            <td>{{ puntaje_produccion |default:0}}</td>
+        </tr>
+
+        <tr>
+            <td colspan="3" style="text-align: right;"><b>TOTAL:</b></td>
+            <td>{{ total_puntaje |default:0}}</td>
+        </tr>
+    </table>
+
+    <div class="buttons">
+        <button type="submit">Guardar</button>
+        <button>Imprimir</button>
+        <button type="button" onclick="limpiarFormulario()">Cerrar</button>
+    </div>
+    </form>
+    <script>
+        function limpiarFormulario() {
+            window.location.reload();  
+        }
+    </script>
+</body>
+</html>
+
